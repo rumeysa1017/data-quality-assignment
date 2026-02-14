@@ -1,0 +1,23 @@
+name: Data Quality Validation
+
+on: [push, pull_request] # Her commit'te çalışır
+
+jobs:
+  validate-data:
+    runs-on: ubuntu-latest # Sanal bir Linux bilgisayar aç
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3 # Kodlarını sanal makineye kopyala
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Data Quality Script
+        run: python dq_pipeline.py
