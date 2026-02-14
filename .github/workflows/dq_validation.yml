@@ -1,14 +1,14 @@
 name: Data Quality Validation
 
-on: [push, pull_request] # Her commit'te çalışır
+on: [push, pull_request, workflow_dispatch] # workflow_dispatch elle çalıştırmayı sağlar
 
 jobs:
   validate-data:
-    runs-on: ubuntu-latest # Sanal bir Linux bilgisayar aç
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3 # Kodlarını sanal makineye kopyala
+        uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -20,4 +20,6 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run Data Quality Script
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # Secret'ı buradan okuyor
         run: python dq_pipeline.py
